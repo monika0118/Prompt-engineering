@@ -1,0 +1,23 @@
+Flask:
+Python Backend (app.py)
+python
+from flask import Flask, request, jsonify
+import openai
+app = Flask(__name__)
+# Set your OpenAI API key
+openai.api_key = 'your_api_key'
+@app.route('/execute_prompt', methods=['POST'])
+def execute_prompt():
+    data = request.json
+    prompt = data['prompt']
+    # Submit prompt to ChatGPT model
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=prompt,
+        temperature=0.7,
+        max_tokens=150
+    )
+    return jsonify({'response': response.choices[0].text.strip()})
+
+if __name__ == '__main__':
+    app.run(debug=True)
